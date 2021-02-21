@@ -1,0 +1,94 @@
+openapi: '3.0.3'
+info:
+  version: 1.0.0
+  title: Location Tracker API
+servers:
+  - url: http://localhost:3000
+paths:
+  /locations:
+    post:
+      tags:
+        - Locations
+      description: Add locations to history
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Location'
+      responses:
+        201:
+          description: Locations added
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Location'
+    get:
+      tags:
+        - Locations
+      description: Get locations
+      parameters:
+        - name: sender-id
+          description: Sender id
+          required: false
+          in: query
+          schema:
+            type: integer
+            format: int32
+        - name: timestamp
+          description: A timestamp to filter locations. Only location after that timestamp are returned
+          required: false
+          in: query
+          schema:
+            type: string
+            format: date-time
+      responses:
+        200:
+          description: A list of locations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Location'
+components:
+  schemas:
+    Location:
+      description: Location
+      type: object
+      properties:
+        senderId:
+          type: integer
+          format: int32
+          description: Sender id
+          readOnly: true
+        receiverId:
+          type: integer
+          format: int32
+          description: Receiver id
+          writeOnly: true
+        timestamp:
+          type: string
+          format: date-time
+          description: Location timestamp
+        latitude:
+          type: string
+          description: Encoded location latitude
+        longitude:
+          type: string
+          description: Encoded location longitude
+    Error:
+      description: Error
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          maxLength: 128
+        message:
+          type: string
+          description: Error message
