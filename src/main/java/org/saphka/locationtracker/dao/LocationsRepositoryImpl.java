@@ -2,7 +2,7 @@ package org.saphka.locationtracker.dao;
 
 import org.jooq.DSLContext;
 import org.saphka.locationtracker.dao.jooq.Tables;
-import org.saphka.locationtracker.dao.jooq.tables.records.LocationsRecord;
+import org.saphka.locationtracker.dao.jooq.tables.records.LocationRecord;
 import org.saphka.locationtracker.dao.util.AsyncHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -21,10 +21,10 @@ public class LocationsRepositoryImpl implements LocationsRepository {
     }
 
     @Override
-    public Flux<LocationsRecord> getLocationsByReceiver(Integer receiverId) {
+    public Flux<LocationRecord> getLocationsByReceiver(Integer receiverId) {
         return async.fromArray(() -> dslContext
-                .selectFrom(Tables.LOCATIONS)
-                .where(Tables.LOCATIONS.RECEIVER_ID.eq(receiverId))
+                .selectFrom(Tables.LOCATION)
+                .where(Tables.LOCATION.RECEIVER_ID.eq(receiverId))
                 .fetchArray());
     }
 
